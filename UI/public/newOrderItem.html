@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>New Order Item</title>
+    <script src="../bower_components/react/react.min.js"></script>
+    <script src="../bower_components/react/react-dom.min.js"></script>
+    <script src="../bower_components/babel/browser.min.js"></script>
+  </head>
+  <body>
+    <div id="container"></div>
+    <script type="text/babel">
+        var Hello = React.createClass({
+          render: function() {
+            return <h1>Hello {this.props.name}</h1>;
+          }
+        });
+
+        ReactDOM.render(
+          <Hello name="World" />,
+          document.getElementById('container')
+        );
+    </script>
+  </body>
+</html>
