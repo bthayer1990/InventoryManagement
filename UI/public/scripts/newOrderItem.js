@@ -19,7 +19,7 @@ var NewOrderItemFooter = React.createClass({
         return(
             <div className="form-inline">
                 <div className="form-group">
-                    <NewOrderItemTotal total='00.00' />
+                    <NewOrderItemTotal total={this.props.total} />
                 </div>
                 <div className="form-group inlineLeftMargin">
                     <NewOrderItemSubmission />
@@ -155,6 +155,7 @@ var PizzaCreatorNewOrderItemContent = React.createClass({
                 <PizzaCreatorSauce sauces={SAUCES} /><hr/>
                 <PizzaCreatorCheese /><hr/>
                 <PizzaCreatorToppings toppings={TOPPINGS} /><br/><hr/>
+                <NewOrderItemFooter total="00.00"/>
             </div>
         );
     }
@@ -210,7 +211,6 @@ var NewOrderItem = React.createClass({
         return (
             <div>
                 <NewOrderItemContent />
-                <NewOrderItemFooter />
             </div>
         );
     }
