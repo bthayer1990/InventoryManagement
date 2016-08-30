@@ -147,6 +147,8 @@ var PizzaCreatorSize = React.createClass({
 var PizzaCreatorNewOrderItemContent = React.createClass({
     render: function() {
         //TODO: get sizes, crusts, sauces, and toppings from API
+        //TODO: post selected data
+        //TODO: calculate total based on selections
         return(
             <div>
                 <h1 className="text-center">Pizza Creator</h1>
