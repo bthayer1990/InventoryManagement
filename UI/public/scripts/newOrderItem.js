@@ -130,8 +130,6 @@ var PizzaCreatorCrust = React.createClass({
     }
 });
 
-
-
 var PizzaCreatorSize = React.createClass({
     handleChange: function(selection) {
         this.props.onSelection(selection);
@@ -142,7 +140,7 @@ var PizzaCreatorSize = React.createClass({
         var handleChangeEvent = this.handleChange;
         this.props.sizes.forEach(function(size) {
             var selected = false;
-            if(selectedSize == size.value){
+            if(selectedSize.value == size.value){
                 selected = true;
             }
             options.push(<RadioOption section="size" value={size.value} selected={selected} onSelection={handleChangeEvent} />);    
@@ -164,39 +162,52 @@ var PizzaCreatorNewOrderItemContent = React.createClass({
     //TODO: calculate total based on selections
     getInitialState: function() {
         return {
-            selectedSize: '',
-            selectedCrust: '',
-            selectedSauce: '',
-            selectedCheese: '',
-            selectedToppings: []
+            selectedSize: {},
+            selectedCrust: {},
+            selectedSauce: {},
+            selectedCheese: {},
+            selectedToppings: [{}],
+            total: 0
         };
     },
-    handleSizeSelection: function(selectedSize) {
+    handleSizeSelection: function(selectedSizeValue) {
+        var selectedSizes = SIZES.filter(function(item){return (item.value == selectedSizeValue);});
         this.setState({
-            selectedSize: selectedSize
+            selectedSize: selectedSizes[0]
         });
     },
-    handleCrustSelection: function(selectedCrust) {
+    handleCrustSelection: function(selectedCrustValue) {
         this.setState({
             selectedCrust: selectedCrust
         });
     },
-    handleSauceSelection: function(selectedSauce) {
+    handleSauceSelection: function(selectedSauceValue) {
         this.setState({
             selectedSauce: selectedSauce
         });
     },
-    handleCheeseSelection: function(selectedCheese) {
+    handleCheeseSelection: function(selectedCheeseValue) {
         this.setState({
             selectedCheese: selectedCheese
         });
     },
-    handleToppingSelection: function(selectedToppings) {
+    handleToppingSelection: function(selectedToppingsValue) {
         this.setState({
             selectedToppings: selectedToppings
         });
     },
+    calculateTotal: function() {
+        var total = 0;
+        if(this.state.selectedSize.price){
+            total += this.state.selectedSize.price;
+        }
+        return total;
+    },
+    handleSubmit: function() {
+
+    },
     render: function() {
+        var total = this.calculateTotal();
         return(
             <div>
                 <h1 className="text-center">Pizza Creator</h1>
@@ -205,17 +216,17 @@ var PizzaCreatorNewOrderItemContent = React.createClass({
                 <PizzaCreatorSauce sauces={SAUCES} selectedSauce={this.state.selectedSauce} onSelection={this.handleSauceSelection} /><hr/>
                 <PizzaCreatorCheese selectedCheese={this.state.selectedCheese} onSelection={this.handleCheeseSelection} /><hr/>
                 <PizzaCreatorToppings toppings={TOPPINGS} selectedToppings={this.state.selectedToppings} onSelection={this.handleToppingSelection} /><br/><hr/>
-                <NewOrderItemFooter total="00.00"/>
+                <NewOrderItemFooter total={total}/>
             </div>
         );
     }
 });
 
 var SIZES = [
-    {value: 'small'},
-    {value: 'medium'},
-    {value: 'large'},
-    {value: 'extra large'}
+    {value: 'small', price: 5.00},
+    {value: 'medium', price: 10.00},
+    {value: 'large', price: 15.00},
+    {value: 'extra large', price: 20.00}
 ]
 
 var CRUSTS = [
