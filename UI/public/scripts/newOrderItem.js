@@ -82,74 +82,27 @@ var PizzaCreatorToppings = React.createClass({
     }
 });
 
-var PizzaCreatorCheese = React.createClass({
-    render: function() {
-        return(
-            <div>
-                <h3>Cheese</h3>
-                <div className="optionsContainer">
-                    <RadioOption section="cheese" value="yes" />
-                    <RadioOption section="cheese" value="no" />
-                </div>
-            </div>
-        );
-    }
-});
-
-var PizzaCreatorSauce = React.createClass({
-    render: function() {
-        var options = [];
-        this.props.sauces.forEach(function(sauce) {
-            options.push(<RadioOption section="sauce" value={sauce.value} />);    
-        });
-        return(
-            <div>
-                <h3>Sauce</h3>
-                <div className="optionsContainer">
-                    {options}
-                </div>
-            </div>
-        );
-    }
-});
-
-var PizzaCreatorCrust = React.createClass({
-    render: function() {
-        var options = [];
-        this.props.crusts.forEach(function(crust) {
-            options.push(<RadioOption section="crust" value={crust.value} />);    
-        });
-        return(
-            <div>
-                <h3>Crust</h3>
-                <div className="optionsContainer">
-                    {options}
-                </div>
-            </div>
-        );
-    }
-});
-
-var PizzaCreatorSize = React.createClass({
+var PizzaCreatorRadioButtonSection = React.createClass({
     handleChange: function(selection) {
         this.props.onSelection(selection);
     },
     render: function() {
-        var options = [];
-        var selectedSize = this.props.selectedSize;
+        var radioOptionComponents = [];
+        var section = this.props.section;
+        var selectedOption = this.props.selectedOption;
         var handleChangeEvent = this.handleChange;
-        this.props.sizes.forEach(function(size) {
+        this.props.options.forEach(function(option) {
             var selected = false;
-            if(selectedSize.value == size.value){
+            if(selectedOption.value == option.value){
                 selected = true;
             }
-            options.push(<RadioOption section="size" value={size.value} selected={selected} onSelection={handleChangeEvent} />);    
+            radioOptionComponents.push(<RadioOption section={section} value={option.value} selected={selected} onSelection={handleChangeEvent} />);    
         });
         return(
             <div>
-                <h3>Size</h3>
+                <h3>{this.props.section}</h3>
                 <div className="optionsContainer">
-                    {options}
+                    {radioOptionComponents}
                 </div>
             </div>
         );
@@ -177,18 +130,21 @@ var PizzaCreatorNewOrderItemContent = React.createClass({
         });
     },
     handleCrustSelection: function(selectedCrustValue) {
+        var selectedCrusts = CRUSTS.filter(function(item){return (item.value == selectedCrustValue);});
         this.setState({
-            selectedCrust: selectedCrust
+            selectedCrust: selectedCrusts[0]
         });
     },
     handleSauceSelection: function(selectedSauceValue) {
+        var selectedSauces = SAUCES.filter(function(item){return (item.value == selectedSauceValue);});
         this.setState({
-            selectedSauce: selectedSauce
+            selectedSauce: selectedSauces[0]
         });
     },
     handleCheeseSelection: function(selectedCheeseValue) {
+        var selectedCheeses = CHEESES.filter(function(item){return (item.value == selectedCheeseValue);});
         this.setState({
-            selectedCheese: selectedCheese
+            selectedCheese: selectedCheeses[0]
         });
     },
     handleToppingSelection: function(selectedToppingsValue) {
@@ -211,10 +167,10 @@ var PizzaCreatorNewOrderItemContent = React.createClass({
         return(
             <div>
                 <h1 className="text-center">Pizza Creator</h1>
-                <PizzaCreatorSize sizes={SIZES} selectedSize={this.state.selectedSize} onSelection={this.handleSizeSelection} /><hr/>
-                <PizzaCreatorCrust crusts={CRUSTS} selectedCrust={this.state.selectedCrust} onSelection={this.handleCrustSelection} /><hr/>
-                <PizzaCreatorSauce sauces={SAUCES} selectedSauce={this.state.selectedSauce} onSelection={this.handleSauceSelection} /><hr/>
-                <PizzaCreatorCheese selectedCheese={this.state.selectedCheese} onSelection={this.handleCheeseSelection} /><hr/>
+                <PizzaCreatorRadioButtonSection section="Size" options={SIZES} selectedOption={this.state.selectedSize} onSelection={this.handleSizeSelection} /><hr/>
+                <PizzaCreatorRadioButtonSection section="Crust" options={CRUSTS} selectedOption={this.state.selectedCrust} onSelection={this.handleCrustSelection} /><hr/>
+                <PizzaCreatorRadioButtonSection section="Sauce" options={SAUCES} selectedOption={this.state.selectedSauce} onSelection={this.handleSauceSelection} /><hr/>
+                <PizzaCreatorRadioButtonSection section="Cheese" options={CHEESES} selectedOption={this.state.selectedCheese} onSelection={this.handleCheeseSelection} /><hr/>
                 <PizzaCreatorToppings toppings={TOPPINGS} selectedToppings={this.state.selectedToppings} onSelection={this.handleToppingSelection} /><br/><hr/>
                 <NewOrderItemFooter total={total}/>
             </div>
@@ -240,6 +196,11 @@ var SAUCES = [
     {value: 'bbq'},
     {value: 'ranch'},
     {value: 'buffalo'}
+]
+
+var CHEESES = [
+    {value: 'yes'},
+    {value: 'no'}
 ]
 
 var TOPPINGS = [
