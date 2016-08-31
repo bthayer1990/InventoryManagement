@@ -30,11 +30,59 @@ var NewOrderItemFooter = React.createClass({
 });
 
 var CheckboxOption = React.createClass({
+    handleChange: function() {
+        this.props.onSelection(
+            this.refs.option.value,
+            this.refs.option.checked
+        );
+    },
     render: function() {
         return(
             <label className="checkbox-inline">
-                <input type="checkbox" value={this.props.value} />{this.props.value}
+                <input type="checkbox" value={this.props.value} ref="option" checked={this.props.selected} onChange={this.handleChange} />{this.props.value}
             </label>
+        );
+    }
+});
+
+var CheckBoxOptionHeader = React.createClass({
+    render: function() {
+        return(
+            <div>
+                <br/>
+                <h4>{this.props.text}</h4>
+            </div>
+        );
+    }
+});
+
+var PizzaCreatorCheckboxSection = React.createClass({
+    handleChange: function(selection, checked) {
+        this.props.onSelection(selection, checked);
+    },
+    render: function() {
+        var checkboxOptionComponents = [];
+        var selectedOptions = this.props.selectedOptions;
+        var handleChangeEvent = this.handleChange;
+        var lastType = null;
+        this.props.options.forEach(function(option) {
+            if (option.type !== lastType) {
+                checkboxOptionComponents.push(<CheckBoxOptionHeader text={option.type} />);
+            }
+            var selected = false;
+            if(selectedOptions.filter(function(item){return (item.value == option.value);}).length > 0){
+                selected = true;
+            }
+            checkboxOptionComponents.push(<CheckboxOption value={option.value} selected={selected} onSelection={handleChangeEvent} />);
+            lastType = option.type;
+        }.bind(this));
+        return(
+            <div>
+                <h3>{this.props.section}</h3>
+                <div className="optionsContainer">
+                    {checkboxOptionComponents}
+                </div>
+            </div>
         );
     }
 });
@@ -50,34 +98,6 @@ var RadioOption = React.createClass({
             <label className="radio-inline">
                 <input type="radio" name={this.props.section} value={this.props.value} ref="option" checked={this.props.selected} onChange={this.handleChange} />{this.props.value}
             </label>
-        );
-    }
-});
-
-var PizzaCreatorToppings = React.createClass({
-    render: function() {
-        var meatOptions = [];
-        var veggieOptions = [];
-        this.props.toppings.forEach(function(topping){
-            if(topping.type === 'meat'){
-                meatOptions.push(<CheckboxOption value={topping.value} />)
-            }
-            else{
-                veggieOptions.push(<CheckboxOption value={topping.value} />)
-            }
-        });
-        return(
-            <div>
-                <h3>Toppings</h3>
-                <br/>
-                <div className="optionsContainer">
-                    <h4>Meats</h4>
-                    {meatOptions}
-                    <br/><br/>
-                    <h4>Veggies</h4>
-                    {veggieOptions}
-                </div>
-            </div>
         );
     }
 });
@@ -119,7 +139,7 @@ var PizzaCreatorNewOrderItemContent = React.createClass({
             selectedCrust: {},
             selectedSauce: {},
             selectedCheese: {},
-            selectedToppings: [{}],
+            selectedToppings: [],
             total: 0
         };
     },
@@ -147,9 +167,21 @@ var PizzaCreatorNewOrderItemContent = React.createClass({
             selectedCheese: selectedCheeses[0]
         });
     },
-    handleToppingSelection: function(selectedToppingsValue) {
+    handleToppingSelection: function(selectedToppingValue, checked) {
+        var stateSelectedToppings = this.state.selectedToppings;
+        if (checked) {
+            var selectedToppings = TOPPINGS.filter(function(item){return (item.value == selectedToppingValue);});
+            stateSelectedToppings.push(selectedToppings[0]);
+        }
+        else {
+            for(var i = 0; i < stateSelectedToppings.length; i++){
+                if(stateSelectedToppings[i].value == selectedToppingValue){
+                    stateSelectedToppings.splice(i, 1);
+                }
+            }
+        }
         this.setState({
-            selectedToppings: selectedToppings
+            selectedToppings: stateSelectedToppings
         });
     },
     calculateTotal: function() {
@@ -171,7 +203,7 @@ var PizzaCreatorNewOrderItemContent = React.createClass({
                 <PizzaCreatorRadioButtonSection section="Crust" options={CRUSTS} selectedOption={this.state.selectedCrust} onSelection={this.handleCrustSelection} /><hr/>
                 <PizzaCreatorRadioButtonSection section="Sauce" options={SAUCES} selectedOption={this.state.selectedSauce} onSelection={this.handleSauceSelection} /><hr/>
                 <PizzaCreatorRadioButtonSection section="Cheese" options={CHEESES} selectedOption={this.state.selectedCheese} onSelection={this.handleCheeseSelection} /><hr/>
-                <PizzaCreatorToppings toppings={TOPPINGS} selectedToppings={this.state.selectedToppings} onSelection={this.handleToppingSelection} /><br/><hr/>
+                <PizzaCreatorCheckboxSection section="Toppings" options={TOPPINGS} selectedOptions={this.state.selectedToppings} onSelection={this.handleToppingSelection} /><br/><hr/>
                 <NewOrderItemFooter total={total}/>
             </div>
         );
@@ -204,18 +236,18 @@ var CHEESES = [
 ]
 
 var TOPPINGS = [
-    {type: 'meat', value: 'pepperoni'},
-    {type: 'meat', value: 'sausage'},
-    {type: 'meat', value: 'bacon'},
-    {type: 'meat', value: 'canadian bacon'},
-    {type: 'meat', value: 'hamburger'},
-    {type: 'meat', value: 'steak'},
-    {type: 'veggie', value: 'peppers'},
-    {type: 'veggie', value: 'onions'},
-    {type: 'veggie', value: 'olives'},
-    {type: 'veggie', value: 'spinach'},
-    {type: 'veggie', value: 'mushrooms'},
-    {type: 'veggie', value: 'garlic'}
+    {type: 'Meat', value: 'pepperoni'},
+    {type: 'Meat', value: 'sausage'},
+    {type: 'Meat', value: 'bacon'},
+    {type: 'Meat', value: 'canadian bacon'},
+    {type: 'Meat', value: 'hamburger'},
+    {type: 'Meat', value: 'steak'},
+    {type: 'Veggie', value: 'peppers'},
+    {type: 'Veggie', value: 'onions'},
+    {type: 'Veggie', value: 'olives'},
+    {type: 'Veggie', value: 'spinach'},
+    {type: 'Veggie', value: 'mushrooms'},
+    {type: 'Veggie', value: 'garlic'}
 ]
 
 var NewOrderItemContent = React.createClass({
