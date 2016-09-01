@@ -1,7 +1,7 @@
 var Route = ReactRouter.Route;
 var Router = ReactRouter.Router;
-var DefaultRoute = ReactRouter.DefaultRoute;
-var RouteHandler = ReactRouter.RouteHandler;
+var Link = ReactRouter.Link;
+var IndexRoute = ReactRouter.IndexRoute;
 
 var NewOrderItemSubmission = React.createClass({
     render: function(){
@@ -203,7 +203,7 @@ var PizzaCreatorNewOrderItemContent = React.createClass({
         var total = this.calculateTotal();
         return(
             <div>
-                <h1 className="text-center">Pizza Creator</h1>
+                <h1 className="text-center">Create Your Own Pizza</h1>
                 <PizzaCreatorRadioButtonSection section="Size" options={SIZES} selectedOption={this.state.selectedSize} onSelection={this.handleSizeSelection} /><hr/>
                 <PizzaCreatorRadioButtonSection section="Crust" options={CRUSTS} selectedOption={this.state.selectedCrust} onSelection={this.handleCrustSelection} /><hr/>
                 <PizzaCreatorRadioButtonSection section="Sauce" options={SAUCES} selectedOption={this.state.selectedSauce} onSelection={this.handleSauceSelection} /><hr/>
@@ -260,14 +260,53 @@ var Home = React.createClass({
         return (
             <div>
                 <h1>Home Page</h1>
+                <ul role="nav">
+                    <li><Link to="/createPizza">Create Your Own Pizza</Link></li>
+                </ul>
+            </div>
+        );
+    }
+});
+
+var App = React.createClass({
+    render: function() {
+        return (
+            <div>
+                <div className="navbar navbar-default navbar-fixed-top">
+                    <div className="container">
+                        <div className="navbar-header">
+                            <button type="button" className="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                                <span className="icon-bar"></span>
+                                <span className="icon-bar"></span>
+                                <span className="icon-bar"></span>
+                            </button>
+                            <Link to="/" className="navbar-brand">App Name</Link>
+                        </div>
+                        <div className="navbar-collapse collapse">
+                            <ul className="nav navbar-nav">
+                                <li className="dropdown">
+                                    <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Pizza<span className="caret"></span></a>
+                                    <ul className="dropdown-menu">
+                                        <li><Link to="/createPizza">Create Your Own Pizza</Link></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                {this.props.children}
             </div>
         );
     }
 });
 
 ReactDOM.render((
-  <Router>
-    <Route path="/" component={Home}/>
-    <Route path="/createPizza" component={PizzaCreatorNewOrderItemContent}/>
-  </Router>
+  <div>
+    <Router>
+        <Route path="/" component={App}>
+            <IndexRoute component={Home}/>
+            <Route path="/createPizza" component={PizzaCreatorNewOrderItemContent}/>
+        </Route>
+    </Router>
+  </div>
 ), document.getElementById('container'))
