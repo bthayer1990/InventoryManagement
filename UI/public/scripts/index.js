@@ -1,3 +1,8 @@
+var Route = ReactRouter.Route;
+var Router = ReactRouter.Router;
+var DefaultRoute = ReactRouter.DefaultRoute;
+var RouteHandler = ReactRouter.RouteHandler;
+
 var NewOrderItemSubmission = React.createClass({
     render: function(){
         return(
@@ -250,27 +255,19 @@ var TOPPINGS = [
     {type: 'Veggie', value: 'garlic'}
 ]
 
-var NewOrderItemContent = React.createClass({
-    render: function() {
-        return(
-            <div>
-                <PizzaCreatorNewOrderItemContent />
-            </div>
-        );
-    }
-});
-
-var NewOrderItem = React.createClass({
+var Home = React.createClass({
     render: function() {
         return (
             <div>
-                <NewOrderItemContent />
+                <h1>Home Page</h1>
             </div>
         );
     }
 });
 
-ReactDOM.render(
-    <NewOrderItem />,
-    document.getElementById('container')
-);
+ReactDOM.render((
+  <Router>
+    <Route path="/" component={Home}/>
+    <Route path="/createPizza" component={PizzaCreatorNewOrderItemContent}/>
+  </Router>
+), document.getElementById('container'))
