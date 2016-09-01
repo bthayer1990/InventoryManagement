@@ -3,32 +3,14 @@ var Router = ReactRouter.Router;
 var Link = ReactRouter.Link;
 var IndexRoute = ReactRouter.IndexRoute;
 
-var NewOrderItemSubmission = React.createClass({
-    render: function(){
-        return(
-            <input type="button" className="btn btn-success btn-lg" value="Add to Order" />
-        );
-    }
-});
-
-var NewOrderItemTotal = React.createClass({
-    render: function(){
-        return(
-            <label className="totalLabel">Total: ${this.props.total}</label>
-        );
-    }
-});
-
 var NewOrderItemFooter = React.createClass({
     render: function(){
         return(
             <div className="form-inline">
                 <div className="form-group">
-                    <NewOrderItemTotal total={this.props.total} />
+                    <label className="totalLabel">Total: ${this.props.total}</label>
                 </div>
-                <div className="form-group inlineLeftMargin">
-                    <NewOrderItemSubmission />
-                </div>
+                <button className="inlineLeftMargin btn btn-success btn-lg" >Add to Order</button>
             </div>
         );
     }
@@ -272,7 +254,7 @@ var App = React.createClass({
     render: function() {
         return (
             <div>
-                <div className="navbar navbar-default navbar-fixed-top">
+                <div className="navbar navbar-inverse navbar-fixed-top">
                     <div className="container">
                         <div className="navbar-header">
                             <button type="button" className="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
