@@ -4,13 +4,17 @@ var Link = ReactRouter.Link;
 var IndexRoute = ReactRouter.IndexRoute;
 
 var NewOrderItemFooter = React.createClass({
+    handleSubmit: function(e) {
+        e.preventDefault();
+        this.props.onSubmit();
+    },
     render: function(){
         return(
             <div className="form-inline">
                 <div className="form-group">
                     <label className="totalLabel">Total: ${this.props.total}</label>
                 </div>
-                <button className="inlineLeftMargin btn btn-success btn-lg" >Add to Order</button>
+                <button className="inlineLeftMargin btn btn-success btn-lg" onClick={this.handleSubmit} >Add to Order</button>
             </div>
         );
     }
@@ -117,11 +121,100 @@ var PizzaCreatorRadioButtonSection = React.createClass({
 });
 
 var PizzaCreatorNewOrderItemContent = React.createClass({
-    //TODO: get sizes, crusts, sauces, and toppings from API
+    loadSizesFromServer: function() {
+        $.ajax({
+            url: 'enter url here',
+            dataType: 'json',
+            cache: false,
+            success: function(data) {
+                this.setState({sizes: data});
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error('enter url here', status, err.toString());
+            }.bind(this)
+        });
+    },
+    loadCrustsFromServer: function() {
+        $.ajax({
+            url: 'enter url here',
+            dataType: 'json',
+            cache: false,
+            success: function(data) {
+                this.setState({crusts: data});
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error('enter url here', status, err.toString());
+            }.bind(this)
+        });
+    },
+    loadSaucesFromServer: function() {
+        $.ajax({
+            url: 'enter url here',
+            dataType: 'json',
+            cache: false,
+            success: function(data) {
+                this.setState({sauces: data});
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error('enter url here', status, err.toString());
+            }.bind(this)
+        });
+    },
+    loadCheesesFromServer: function() {
+        $.ajax({
+            url: 'enter url here',
+            dataType: 'json',
+            cache: false,
+            success: function(data) {
+                this.setState({cheeses: data});
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error('enter url here', status, err.toString());
+            }.bind(this)
+        });
+    },
+    loadToppingsFromServer: function() {
+        $.ajax({
+            url: 'enter url here',
+            dataType: 'json',
+            cache: false,
+            success: function(data) {
+                this.setState({toppings: data});
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error('enter url here', status, err.toString());
+            }.bind(this)
+        });
+    },
+    contextTypes: {
+        router: React.PropTypes.object
+    },
+    handleSubmit: function() {
+        var path = '/';
+        this.context.router.push(path);
+        //var pizza = {};//TODO: determine structure of data to send; use the state data
+        // $.ajax({
+        //     url: 'enter url here',
+        //     dataType: 'json',
+        //     type: 'POST',
+        //     data: pizza, 
+        //     success: function(data) {
+        //         var path = '/';
+        //         this.context.router.push(path);
+        //     }.bind(this),
+        //     error: function(xhr, status, err) {
+        //         console.error('enter url here', status, err.toString());
+        //     }.bind(this)
+        // });
+    },
     //TODO: post selected data
-    //TODO: calculate total based on selections
     getInitialState: function() {
         return {
+            // sizes: [],
+            // crusts: [],
+            // sauces: [],
+            // cheeses: [],
+            // toppings: [],
             selectedSize: {},
             selectedCrust: {},
             selectedSauce: {},
@@ -129,6 +222,13 @@ var PizzaCreatorNewOrderItemContent = React.createClass({
             selectedToppings: [],
             total: 0
         };
+    },
+    componentDidMount: function() {
+        // this.loadSizesFromServer();
+        // this.loadCrustsFromServer();
+        // this.loadSaucesFromServer();
+        // this.loadCheesesFromServer();
+        // this.loadToppingsFromServer();
     },
     handleSizeSelection: function(selectedSizeValue) {
         var selectedSizes = SIZES.filter(function(item){return (item.value == selectedSizeValue);});
@@ -178,9 +278,6 @@ var PizzaCreatorNewOrderItemContent = React.createClass({
         }
         return total;
     },
-    handleSubmit: function() {
-
-    },
     render: function() {
         var total = this.calculateTotal();
         return(
@@ -191,7 +288,7 @@ var PizzaCreatorNewOrderItemContent = React.createClass({
                 <PizzaCreatorRadioButtonSection section="Sauce" options={SAUCES} selectedOption={this.state.selectedSauce} onSelection={this.handleSauceSelection} /><hr/>
                 <PizzaCreatorRadioButtonSection section="Cheese" options={CHEESES} selectedOption={this.state.selectedCheese} onSelection={this.handleCheeseSelection} /><hr/>
                 <PizzaCreatorCheckboxSection section="Toppings" options={TOPPINGS} selectedOptions={this.state.selectedToppings} onSelection={this.handleToppingSelection} /><br/><hr/>
-                <NewOrderItemFooter total={total}/>
+                <NewOrderItemFooter total={total} onSubmit={this.handleSubmit} />
             </div>
         );
     }
