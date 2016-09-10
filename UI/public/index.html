@@ -1,20 +1,19 @@
+<!DOCTYPE html>
 <html>
-<head>
-<script type="text/javascript">
-	var CommentBox = React.createClass({
-  render: function() {
-    return (
-      <div className="commentBox">
-        Hello, world! I am a CommentBox.
-      </div>
-    );
-  }
-});
-ReactDOM.render(
-  <CommentBox />,
-  document.getElementById('content')
-);
-</script>
-</head>
-<body><p>hi</p></body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>App Name</title>
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="stylesheets/style.css">
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="bower_components/react/react.min.js"></script>
+    <script src="bower_components/react/react-dom.min.js"></script>
+    <script src="bower_components/babel/browser.min.js"></script>
+    <script src="https://npmcdn.com/react-router/umd/ReactRouter.min.js"></script>
+  </head>
+  <body>
+    <div id="container" class="container"></div>
+    <script type="text/babel" src="scripts/index.js" />
+  </body>
 </html>

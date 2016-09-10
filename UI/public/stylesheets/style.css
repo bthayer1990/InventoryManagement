@@ -6,3 +6,15 @@ body {
 a {
   color: #00B7FF;
 }
+
+.totalLabel {
+  font-size: 25px; 
+}
+
+.inlineLeftMargin {
+  margin-left: 20px;
+}
+
+.optionsContainer {
+  margin-left: 20px;
+}
