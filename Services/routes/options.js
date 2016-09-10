@@ -40,7 +40,7 @@ router.get('/toppings', function(req, res, next) {
             res.err('error fetching client from pool', err);
         }
         var results = [];
-        client.query('select t."name", c."name", p."price" ' +
+        client.query('select t."name" as "toppingName", c."name" as "categoryName", p."price"  ' +
             'from pizzaown."topping" t ' +
             'left join pizzaown."toppingCategory" tc on tc."toppingId" = t."id" ' +
             'left join pizzaown."category" c on c."id" = "categoryId" ' +
