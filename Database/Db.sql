@@ -102,3 +102,17 @@ WITH (
 );
 ALTER TABLE pizzaown."toppingPrice"
   OWNER TO pizza;
+
+  -- DROP TABLE pizzaown.sauce;
+
+CREATE TABLE pizzaown.sauce
+(
+  id serial NOT NULL,
+  name text,
+  CONSTRAINT "saucePk" PRIMARY KEY (id)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE pizzaown.sauce
+  OWNER TO pizza;
