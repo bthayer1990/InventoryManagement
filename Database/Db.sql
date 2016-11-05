@@ -147,3 +147,50 @@ WITH (
 ALTER TABLE pizzaown."sizePrice"
   OWNER TO pizza;
 
+CREATE TABLE pizzaown.crust
+(
+  id serial NOT NULL,
+  name text,
+  CONSTRAINT "crustPk" PRIMARY KEY (id)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE pizzaown.crust
+  OWNER TO pizza;
+
+CREATE TABLE pizzaown."crustPrice"
+(
+  "crustId" integer NOT NULL,
+  "priceId" integer,
+  CONSTRAINT "crustPricePk" PRIMARY KEY ("crustId"),
+  CONSTRAINT "crustPriceCrustFk" FOREIGN KEY ("crustId")
+      REFERENCES pizzaown.crust (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT "crustPricePriceFk" FOREIGN KEY ("priceId")
+      REFERENCES pizzaown.price (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE pizzaown."crustPrice"
+  OWNER TO pizza;
+
+CREATE TABLE pizzaown."saucePrice"
+(
+  "sauceId" integer NOT NULL,
+  "priceId" integer,
+  CONSTRAINT "saucePricePk" PRIMARY KEY ("sauceId"),
+  CONSTRAINT "saucePricePriceFk" FOREIGN KEY ("priceId")
+      REFERENCES pizzaown.price (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT "saucePriceSauceFk" FOREIGN KEY ("sauceId")
+      REFERENCES pizzaown.sauce (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE pizzaown."saucePrice"
+  OWNER TO pizza;
