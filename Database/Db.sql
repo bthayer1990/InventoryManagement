@@ -116,3 +116,34 @@ WITH (
 );
 ALTER TABLE pizzaown.sauce
   OWNER TO pizza;
+
+CREATE TABLE pizzaown.size
+(
+  id serial NOT NULL,
+  name text,
+  CONSTRAINT "sizePk" PRIMARY KEY (id)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE pizzaown.size
+  OWNER TO pizza;
+
+CREATE TABLE pizzaown."sizePrice"
+(
+  "sizeId" integer NOT NULL,
+  "priceId" integer,
+  CONSTRAINT "sizePricePk" PRIMARY KEY ("sizeId"),
+  CONSTRAINT "sizePricePriceFk" FOREIGN KEY ("priceId")
+      REFERENCES pizzaown.price (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT "sizePriceSizeFk" FOREIGN KEY ("sizeId")
+      REFERENCES pizzaown.size (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE pizzaown."sizePrice"
+  OWNER TO pizza;
+
